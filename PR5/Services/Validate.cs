@@ -24,17 +24,14 @@ namespace PR5.Services
             {
                 return "Телефон должен содержать только цифры";
             }
-            // Дополнительные проверки
             if (user.Birthday > DateTime.Now)
             {
                 return "Дата рождения не может быть в будущем";
             }
 
-            if (user.Password?.Length < 8)
-                return "Пароль должен быть не менее 8 символов";
+            if (user.Password.Length < 3)
+                return "Пароль должен быть не менее 3 символов";
 
-            if (user.Birthday > DateTime.Now)
-                return "Дата рождения не может быть в будущем";
 
             if (!string.IsNullOrEmpty(user.Mail) && !user.Mail.Contains("@"))
                 return "Некорректный формат email";
