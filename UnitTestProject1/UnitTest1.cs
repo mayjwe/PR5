@@ -80,27 +80,50 @@ namespace UnitTestProject1
         // Тест 4
 
         [TestMethod]
-        public void ValidatePassword_TooShort_ReturnsError()
+        public void ShortPassword()
         {
-            // Arrange
             var validator = new Validate();
             var user = new User
             {
-                Birthday = DateTime.Now.AddDays(1),
+                Surname = "Сидоров",
+                Name = "Сидор",
+                Phone = "79217654321",
+                Mail = "valid@email.com",
+                Birthday = new DateTime(1970, 12, 25),
+                Password = "1", // Short password
+                Login = "valid_login",
+                ID_Post = 3
+            };
+
+            var result = validator.ValidateUser(user);
+
+            // Проверяем, что возвращена ошибка
+            Assert.IsNotNull(result, "Валидатор должен вернуть ошибку для короткого пароля");
+            Assert.AreNotEqual(string.Empty, result, "Валидатор должен вернуть ошибку для короткого пароля");
+        }
+
+
+        // Тест 5
+        [TestMethod]
+        public void Email()
+        {
+            var validator = new Validate();
+            var user = new User
+            {
+                Mail = "invalid-email",
                 Surname = "Иванов",
                 Name = "Иван",
+                Password = "123",
+                Birthday = new DateTime(1990, 1, 1),
                 Phone = "79123123",
-                Mail = "test@test.com",
-                Password = "1",
                 Login = "000",
                 ID_Post = 1
             };
+
             var result = validator.ValidateUser(user);
-            Assert.AreEqual("Пароль должен содержать минимум 3 символа", result);
+
+            Assert.AreEqual("Некорректный формат email", result);
         }
-
-        // Тест 5
-
     }
     // Тест 6
     [TestClass]

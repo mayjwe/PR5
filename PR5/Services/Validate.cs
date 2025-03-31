@@ -15,6 +15,9 @@ namespace PR5.Services
         {
             var context = new ValidationContext(user);
             var results = new List<ValidationResult>();
+            if (user == null)
+                return "Пользователь не может быть null";
+
             var errors = new List<string>();
             if (!Validator.TryValidateObject(user, context, results, true))
             {
@@ -29,9 +32,10 @@ namespace PR5.Services
                 return "Дата рождения не может быть в будущем";
             }
 
-            if (user.Password.Length < 3)
-                return "Пароль должен быть не менее 3 символов";
-
+            if (string.IsNullOrEmpty(user.Password) || user.Password.Length < 8)
+            {
+                errors.Add("Пароль должен содержать минимум 8 символов");
+            }
 
             if (!string.IsNullOrEmpty(user.Mail) && !user.Mail.Contains("@"))
                 return "Некорректный формат email";
