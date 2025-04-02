@@ -13,10 +13,18 @@ namespace PR5.Services
     public partial class AddPage : Page
     {
         private readonly Validate _validator = new Validate();
+        private User _currentUser;
 
-        public AddPage()
+        public AddPage(User user)
         {
             InitializeComponent();
+            _currentUser = user;
+            if (_currentUser.ID_Post != 1)
+            {
+                MessageBox.Show("У вас нет прав для добавления сотрудников");
+                NavigationService?.GoBack();
+                return;
+            }
         }
 
         private void tbBirthday_GotFocus(object sender, RoutedEventArgs e)
@@ -41,7 +49,6 @@ namespace PR5.Services
         {
             try
             {
-                // Парсинг даты рождения
                 DateTime birthday;
                 if (!DateTime.TryParseExact(tbBirthday.Text, "dd.MM.yyyy",
                     CultureInfo.InvariantCulture, DateTimeStyles.None, out birthday))
@@ -49,12 +56,8 @@ namespace PR5.Services
                     MessageBox.Show("Введите дату в формате дд.мм.гггг");
                     return;
                 }
-
-                // Получаем выбранную должность
                 var selectedPost = (ComboBoxItem)cbPost.SelectedItem;
                 int postId = int.Parse(selectedPost.Tag.ToString());
-
-                // Создаем пользователя
                 var newUser = new User
                 {
                     Surname = tbSurname.Text,
@@ -67,8 +70,6 @@ namespace PR5.Services
                     Mail = tbMail.Text,
                     ID_Post = postId
                 };
-
-                // Валидация через отдельный класс
                 string validationError = _validator.ValidateUser(newUser);
                 if (!string.IsNullOrEmpty(validationError))
                 {
@@ -78,7 +79,6 @@ namespace PR5.Services
 
                 using (var db = new SchoolEntities())
                 {
-                    // Проверка уникальности логина
                     if (db.User.Any(u => u.Login == newUser.Login))
                     {
                         MessageBox.Show("Этот логин уже занят!");

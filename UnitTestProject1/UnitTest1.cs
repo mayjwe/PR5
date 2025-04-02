@@ -90,14 +90,12 @@ namespace UnitTestProject1
                 Phone = "79217654321",
                 Mail = "valid@email.com",
                 Birthday = new DateTime(1970, 12, 25),
-                Password = "1", // Short password
+                Password = "1",
                 Login = "valid_login",
                 ID_Post = 3
             };
 
             var result = validator.ValidateUser(user);
-
-            // Проверяем, что возвращена ошибка
             Assert.IsNotNull(result, "Валидатор должен вернуть ошибку для короткого пароля");
             Assert.AreNotEqual(string.Empty, result, "Валидатор должен вернуть ошибку для короткого пароля");
         }
@@ -132,14 +130,9 @@ namespace UnitTestProject1
         [TestMethod]
         public void CheckLogin_WhenLoginExists_ReturnsError()
         {
-            // Arrange
             var existingLogins = new HashSet<string> { "existing" };
             var newLogin = "existing";
-
-            // Act
             var error = RegistrationHelper.ValidateLogin(existingLogins, newLogin);
-
-            // Assert
             Assert.AreEqual("Логин 'existing' уже занят", error);
         }
     }

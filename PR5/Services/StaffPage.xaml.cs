@@ -8,10 +8,15 @@ namespace PR5.Services
 {
     public partial class StaffPage : Page
     {
+        private User _currentUser;
+
         public StaffPage(User user)
         {
             InitializeComponent();
+            _currentUser = user;
             LoadStaffListWithPosts();
+
+            AddButton.Visibility = _currentUser.ID_Post == 1 ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void LoadStaffListWithPosts()
@@ -20,10 +25,8 @@ namespace PR5.Services
             {
                 using (var db = new SchoolEntities())
                 {
-                    // Получаем все должности
                     var postsDict = db.Post.ToDictionary(p => p.ID_Post, p => p.Post1);
 
-                    // Создаем список с объединенными данными
                     var staffList = db.User.ToList().Select(user => new
                     {
                         User = new
@@ -53,7 +56,7 @@ namespace PR5.Services
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new AddPage());
+            NavigationService.Navigate(new AddPage(_currentUser));
         }
     }
 }

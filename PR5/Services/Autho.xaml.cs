@@ -45,17 +45,8 @@ namespace PR5.Services
 
                     if (user != null)
                     {
-                        if (user.ID_Post == 1)
-                        {
-                            // Теперь StaffPage принимает пользователя в конструкторе
-                            StaffPage page = new StaffPage(user);
-                            NavigationService.Navigate(page); // Лучше использовать навигацию
-                        }
-                        else
-                        {
-                            MessageBox.Show("Доступ запрещен. Недостаточно прав.");
-                            tbPassword.Clear();
-                        }
+                        StaffPage page = new StaffPage(user);
+                        NavigationService.Navigate(page);
                     }
                     else
                     {

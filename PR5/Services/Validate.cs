@@ -32,9 +32,9 @@ namespace PR5.Services
                 return "Дата рождения не может быть в будущем";
             }
 
-            if (string.IsNullOrEmpty(user.Password) || user.Password.Length < 8)
+            if (string.IsNullOrEmpty(user.Password) || user.Password.Length < 3)
             {
-                errors.Add("Пароль должен содержать минимум 8 символов");
+                errors.Add("Пароль должен содержать минимум 3 символов");
             }
 
             if (!string.IsNullOrEmpty(user.Mail) && !user.Mail.Contains("@"))
